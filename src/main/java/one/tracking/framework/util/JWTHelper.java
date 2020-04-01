@@ -39,14 +39,15 @@ public class JWTHelper {
   public String createJWT(final String subject, final long expiration, final String... roles) {
 
     final Claims claims = Jwts.claims().setSubject(subject);
+    claims.setExpiration(Date.from(Instant.now().plusSeconds(expiration)));
+    claims.setIssuedAt(Date.from(Instant.now()));
+    claims.setIssuer(SecurityConstants.ISSUER);
 
     if (roles != null && roles.length > 0)
       claims.put(SecurityConstants.AUTHZ_ROLES, Arrays.asList(roles));
 
+
     return Jwts.builder().setSubject(subject)
-        .setExpiration(Date.from(Instant.now().plusSeconds(expiration)))
-        .setIssuedAt(Date.from(Instant.now()))
-        .setIssuer(SecurityConstants.ISSUER)
         .signWith(SignatureAlgorithm.HS512, this.tokenSecret)
         .setClaims(claims)
         .compact();
