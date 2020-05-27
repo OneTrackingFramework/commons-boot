@@ -82,7 +82,7 @@
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/OneTrackingFramework/kafka-module-boot</url>
+			<url>https://maven.pkg.github.com/OneTrackingFramework/commons-boot</url>
 		</repository>
 	</distributionManagement>
 
