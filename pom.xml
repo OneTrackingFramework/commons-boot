@@ -11,7 +11,7 @@
 	</parent>
 	<groupId>one.tracking.framework</groupId>
 	<artifactId>commons-boot</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>commons-boot</name>
 	<description>Common Spring Boot beans utilized by multiple services.</description>
 
