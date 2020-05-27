@@ -1,0 +1,21 @@
+name: Continuous Integration
+
+on: push
+
+jobs:
+  test:
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v2
+
+      - name: Install Java and Maven
+        uses: actions/setup-java@v1
+        with:
+          java-version: 11
+          
+      - name: Compile
+        run: mvn -B compile 
+
+      - name: Test
+        run: mvn -B test
