@@ -8,6 +8,8 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -16,9 +18,12 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import one.tracking.framework.util.JWTHelper;
 
 public abstract class BearerAuthenticationFilter extends BasicAuthenticationFilter {
+
+  private static final Logger LOG = LoggerFactory.getLogger(BearerAuthenticationFilter.class);
 
   private final JWTHelper jwtHelper;
 
@@ -38,9 +43,20 @@ public abstract class BearerAuthenticationFilter extends BasicAuthenticationFilt
       return;
     }
 
-    final UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
-    SecurityContextHolder.getContext().setAuthentication(authentication);
-    chain.doFilter(req, res);
+    try {
+      final UsernamePasswordAuthenticationToken authentication = getAuthentication(header);
+      SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    } catch (final JwtException e) {
+
+      if (LOG.isDebugEnabled())
+        LOG.debug(e.getMessage(), e);
+      else
+        LOG.warn(e.getMessage());
+
+    } finally {
+      chain.doFilter(req, res);
+    }
   }
 
   /**
